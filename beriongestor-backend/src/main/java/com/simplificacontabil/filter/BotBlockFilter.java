@@ -85,7 +85,16 @@ public class BotBlockFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+
         String ip = getClientIp(request);
+
+        // --- ADICIONE ESTA VERIFICAÇÃO LOGO NO INÍCIO ---
+        if (WHITELISTED_IPS.contains(ip)) {
+            logger.info("🔓 Liberando acesso total para IP na whitelist: {}", ip);
+            filterChain.doFilter(request, response);
+            return; // IMPORTANTE: Termina a execução do filtro para IPs na whitelist
+        }
+
         String uri = request.getRequestURI();
         String query = request.getQueryString();
         String userAgent = request.getHeader("User-Agent");

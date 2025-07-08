@@ -102,9 +102,9 @@ public class SecurityConfig {
                         .contentSecurityPolicy(csp -> csp.policyDirectives(
                                 "default-src 'self'; " +
                                         "script-src 'self' 'unsafe-inline'; " +
-                                        "style-src 'self' 'unsafe-inline'; " +
+                                        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " + // Adicionado 'https://fonts.googleapis.com'
                                         "img-src 'self' data:; " +
-                                        "font-src 'self'; " +
+                                        "font-src 'self' data: https://fonts.gstatic.com; " + // Adicionado 'https://fonts.gstatic.com' e 'data:' para fontes embutidas/base64
                                         "connect-src 'self'; " +
                                         "media-src 'self'; " +
                                         "object-src 'none'; " +

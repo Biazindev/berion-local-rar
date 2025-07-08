@@ -176,9 +176,15 @@
 		</dependency>
 
 		<!-- Driver PostgreSQL -->
+<!--		<dependency>-->
+<!--			<groupId>org.postgresql</groupId>-->
+<!--			<artifactId>postgresql</artifactId>-->
+<!--			<scope>runtime</scope>-->
+<!--		</dependency>-->
+
 		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -267,39 +273,39 @@
 	<build>
 		<plugins>
 			<!-- Spring Boot -->
-			<plugin>
-				<groupId>com.github.eirslett</groupId>
-				<artifactId>frontend-maven-plugin</artifactId>
-				<version>1.12.1</version>
-				<executions>
-					<execution>
-						<id>install node and npm</id>
-						<goals>
-							<goal>install-node-and-npm</goal>
-						</goals>
-						<configuration>
-							<nodeVersion>v16.14.0</nodeVersion>
-						</configuration>
-					</execution>
-					<execution>
-						<id>npm install</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<phase>generate-resources</phase>
-					</execution>
-					<execution>
-						<id>npm run build</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<phase>generate-resources</phase>
-						<configuration>
-							<arguments>run build</arguments>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>com.github.eirslett</groupId>-->
+<!--				<artifactId>frontend-maven-plugin</artifactId>-->
+<!--				<version>1.12.1</version>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<id>install node and npm</id>-->
+<!--						<goals>-->
+<!--							<goal>install-node-and-npm</goal>-->
+<!--						</goals>-->
+<!--						<configuration>-->
+<!--							<nodeVersion>v16.14.0</nodeVersion>-->
+<!--						</configuration>-->
+<!--					</execution>-->
+<!--					<execution>-->
+<!--						<id>npm install</id>-->
+<!--						<goals>-->
+<!--							<goal>npm</goal>-->
+<!--						</goals>-->
+<!--						<phase>generate-resources</phase>-->
+<!--					</execution>-->
+<!--					<execution>-->
+<!--						<id>npm run build</id>-->
+<!--						<goals>-->
+<!--							<goal>npm</goal>-->
+<!--						</goals>-->
+<!--						<phase>generate-resources</phase>-->
+<!--						<configuration>-->
+<!--							<arguments>run build</arguments>-->
+<!--						</configuration>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -356,9 +362,9 @@
 					<include>**/*.pfx</include>
 				</includes>
 			</resource>
-				<resource>
-					<directory>${project.basedir}/target/classes/static</directory>
-				</resource>
+<!--				<resource>-->
+<!--					<directory>${project.basedir}/target/classes/static</directory>-->
+<!--				</resource>-->
 		</resources>
 	</build>
 </project>
