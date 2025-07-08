@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: simplifica-backend
+    env: java
+    plan: free
+    region: oregon
+    buildCommand: "./mvnw clean package -DskipTests"
+    startCommand: "java -jar target/simplifica-contabil-0.0.1-SNAPSHOT.jar"
+    autoDeploy: true
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:mysql://<HOST>:3306/<DB_NAME>?useSSL=false&serverTimezone=UTC
+      - key: SPRING_DATASOURCE_USERNAME
+        value: <USERNAME>
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: <PASSWORD>
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: update

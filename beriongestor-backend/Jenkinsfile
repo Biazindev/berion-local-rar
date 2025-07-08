@@ -1,0 +1,80 @@
+pipeline {
+  agent any
+
+  environment {
+    DEPLOY_DIR = '/opt/app/simplifica-contabil/bin'
+    LOG_FILE   = '/opt/app/simplifica-contabil/logs/app.log'
+  }
+
+  stages {
+    stage('Build') {
+      steps {
+        sh 'mvn clean package -DskipTests'
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        sh '''
+          # 0) Desativa o serviço do systemd
+          echo "Desativando e parando o serviço do systemd..."
+          sudo systemctl disable simplifica.service || true
+          sudo systemctl stop simplifica.service || true
+
+          # 1) Mata processo anterior se existir
+          echo "Procurando e matando processo anterior..."
+          sudo pkill -f "${DEPLOY_DIR}/app.jar" || true
+
+          # Aguarda processo morrer
+          sleep 5
+
+          # Se ainda estiver vivo, mata na força e aguarda
+          PID=$(sudo pgrep -f "${DEPLOY_DIR}/app.jar" || true)
+          if [ ! -z "$PID" ]; then
+            echo "Processo ainda vivo (PID: $PID), matando na força..."
+            sudo kill -9 $PID || true
+            sleep 5
+          fi
+
+          # 2) Copia o novo JAR
+          echo "Copiando novo JAR..."
+          sudo cp target/*.jar ${DEPLOY_DIR}/app.jar
+          sudo chown jenkins:jenkins ${DEPLOY_DIR}/app.jar
+
+          # 3) Inicia a aplicação com nohup
+          echo "Iniciando nova aplicação..."
+          cd /opt/app/simplifica-contabil
+          sudo mkdir -p $(dirname ${LOG_FILE})
+          sudo chown jenkins:jenkins $(dirname ${LOG_FILE})
+
+          sudo -u jenkins sh /opt/app/simplifica-contabil/start.sh &
+
+          # 4) Aguarda inicialização
+          echo "Aguardando inicialização..."
+          sleep 15
+
+          # 5) Verifica se iniciou
+          NEW_PID=$(sudo pgrep -f "${DEPLOY_DIR}/app.jar" || true)
+          if [ ! -z "$NEW_PID" ]; then
+            echo "✅ Aplicação iniciada com sucesso! PID: $NEW_PID"
+            sudo ps -f -p $NEW_PID
+          else
+            echo "❌ Falha ao iniciar a aplicação!"
+            exit 1
+          fi
+        '''
+      }
+    }
+  }
+
+  post {
+    success {
+      echo "✅ Deploy concluído! Últimas linhas do log (${LOG_FILE}):"
+      sh "sudo tail -n 5 ${LOG_FILE}"
+    }
+    failure {
+      echo "❌ Falha no deploy. Últimas linhas do log (${LOG_FILE}):"
+      sh "sudo tail -n 20 ${LOG_FILE} || true"
+    }
+  }
+}

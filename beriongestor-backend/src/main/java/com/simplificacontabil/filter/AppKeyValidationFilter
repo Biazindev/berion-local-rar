@@ -1,0 +1,28 @@
+//package com.simplificacontabil.filter;
+//
+//import jakarta.servlet.FilterChain;
+//import jakarta.servlet.ServletException;
+//import jakarta.servlet.http.HttpServletRequest;
+//import jakarta.servlet.http.HttpServletResponse;
+//import org.springframework.stereotype.Component;
+//import org.springframework.web.filter.OncePerRequestFilter;
+//
+//import java.io.IOException;
+//
+//@Component
+//public class AppKeyValidationFilter extends OncePerRequestFilter {
+//
+//    private static final String HEADER_NAME = "SIMPLIFICA-API-KEY";
+//    private static final String APP_KEY = "biaza";
+//
+//    @Override
+//    protected void doFilterInternal(HttpServletRequest request,
+//                                    HttpServletResponse response,
+//                                    FilterChain filterChain) throws ServletException, IOException {
+//
+//        if (!APP_KEY.equals(request.getHeader(HEADER_NAME))) {
+//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Requisição não autorizada.");
+//            return;
+//            }
+//        }
+//    }
